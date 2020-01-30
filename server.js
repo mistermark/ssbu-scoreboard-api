@@ -1,32 +1,16 @@
 let express = require("express"),
   path = require("path"),
   createError = require("http-errors"),
-  mongoose = require("mongoose"),
   cors = require("cors"),
-  bodyParser = require("body-parser"),
-  dbConfig = require("./database/db");
+  bodyParser = require("body-parser");
 
+require("dotenv").config({ path: __dirname + "/.env" });
+require("./database/db");
 require("./models/player");
 require("./models/gameset");
 require("./models/livegame");
 require("./models/character");
 require("./models/stage");
-
-// Connecting with mongo db
-mongoose.Promise = global.Promise;
-mongoose
-  .connect(dbConfig.db, {
-    useNewUrlParser: true,
-    useFindAndModify: false
-  })
-  .then(
-    () => {
-      console.log("Database sucessfully connected");
-    },
-    error => {
-      console.log("Database could not connected: " + error);
-    }
-  );
 
 // Setting up port with express js
 const playerRoute = require("./routes/player.route");
@@ -62,7 +46,7 @@ app.use("/api/upload", uploadRoute);
 // Create port
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
-  console.log("Connected to port " + port);
+  console.log(`App listening on ${port}!`);
 });
 
 // Find 404 and hand over to error handler
