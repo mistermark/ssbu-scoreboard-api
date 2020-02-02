@@ -12,6 +12,9 @@ require("./models/livegame");
 require("./models/character");
 require("./models/stage");
 
+global.appDir = path.resolve(__dirname);
+const { APP_PORT, ALLOWED_DOMAIN } = process.env;
+
 // Setting up port with express js
 const playerRoute = require("./routes/player.route");
 const gamesetRoute = require("./routes/gameset.route");
@@ -21,16 +24,15 @@ const stageRoute = require("./routes/stage.route");
 const uploadRoute = require("./routes/upload.route");
 const app = express();
 
-global.appDir = path.resolve(__dirname);
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false
   })
 );
+
 var corsOptions = {
-  origin: "*",
+  origin: ALLOWED_DOMAIN,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
@@ -44,7 +46,7 @@ app.use("/api/stages", stageRoute);
 app.use("/api/upload", uploadRoute);
 
 // Create port
-const port = process.env.PORT || 4000;
+const port = APP_PORT || 4000;
 const server = app.listen(port, () => {
   console.log(`App listening on ${port}!`);
 });
