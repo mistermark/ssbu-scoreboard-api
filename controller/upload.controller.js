@@ -1,9 +1,13 @@
 const IncomingForm = require("formidable").IncomingForm;
 const path = require("path");
 const fs = require("fs");
+const mv = require("mv");
+
+const APP_UPLOADS = appDir + "/public/uploads";
 
 exports.upload = (req, res, next) => {
   var form = new IncomingForm();
+  form.uploadDir = APP_UPLOADS;
 
   form.parse(req, function(err, fields, files) {
     let newFileName;
@@ -17,7 +21,7 @@ exports.upload = (req, res, next) => {
       seconds: isoDate.getSeconds()
     };
 
-    if (path.join(uploadDir, files.file.name)) {
+    if (path.join(APP_UPLOADS, files.file.name)) {
       const fileName = files.file.name.substring(
         0,
         files.file.name.indexOf(".")
@@ -27,13 +31,11 @@ exports.upload = (req, res, next) => {
       );
       newFileName = `${fileName}-${date.year}${date.month}${date.day}${date.hours}${date.minutes}${date.seconds}.${fileExtension}`;
     }
-    fs.rename(files.file.path, path.join(uploadDir, newFileName), function(
-      err
-    ) {
+    mv(files.file.path, path.join(APP_UPLOADS, newFileName), function(err) {
       if (err) {
         console.error(err);
       } else {
-        console.log("success!");
+        console.log("Upload success!");
       }
     });
 

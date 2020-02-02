@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "docker": "docker run -p 8080:8080 -d m1ster/ssbu-scoreboard-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "http-errors": "^1.7.3",
     "install": "^0.13.0",
     "mongoose": "^5.8.1",
+    "mv": "^2.1.1",
     "npm": "^6.13.4"
   },
   "devDependencies": {
